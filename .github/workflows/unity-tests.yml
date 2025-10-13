@@ -1,0 +1,48 @@
+name: Unity Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  editmode:
+    name: EditMode Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run EditMode Tests
+        uses: game-ci/unity-test-runner@v4
+        with:
+          unityVersion: 2022.3.0f1
+          testMode: editmode
+          artifactsPath: TestResults/EditMode
+          customParameters: "-nographics -batchmode"
+
+      - name: Upload EditMode results
+        uses: actions/upload-artifact@v4
+        with:
+          name: EditMode Results
+          path: TestResults/EditMode
+
+  playmode:
+    name: PlayMode Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run PlayMode Tests
+        uses: game-ci/unity-test-runner@v4
+        with:
+          unityVersion: 2022.3.0f1
+          testMode: playmode
+          artifactsPath: TestResults/PlayMode
+          customParameters: "-nographics -batchmode"
+
+      - name: Upload PlayMode results
+        uses: actions/upload-artifact@v4
+        with:
+          name: PlayMode Results
+          path: TestResults/PlayMode
