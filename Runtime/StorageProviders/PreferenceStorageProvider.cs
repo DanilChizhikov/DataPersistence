@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace DTech.DataPersistence
+namespace DTech.DataPersistence.StorageProviders
 {
 	public sealed class PreferenceStorageProvider : IStorageProvider
 	{
@@ -16,10 +16,10 @@ namespace DTech.DataPersistence
 			return Task.FromResult(true);
 		}
 
-		public Task<WriterReadResponse> ReadAsync(string key, string defaultValue)
+		public Task<StorageReadResponse> ReadAsync(string key, string defaultValue)
 		{
 			string result = PlayerPrefs.GetString(key, defaultValue);
-			var response = new WriterReadResponse(true, result);
+			var response = new StorageReadResponse(true, result);
 			return Task.FromResult(response);
 		}
 

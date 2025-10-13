@@ -1,4 +1,5 @@
 using DTech.DataPersistence;
+using DTech.DataPersistence.StorageProviders;
 using NUnit.Framework;
 
 namespace DataPersistence.Tests

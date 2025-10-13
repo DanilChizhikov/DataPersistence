@@ -31,14 +31,15 @@ namespace DTech.DataPersistence
 		{
 			T result = defaultValue;
 			string encryptedDefaultValue = SerializeAndEncrypt(defaultValue);
-			WriterReadResponse response = await _storageProvider.ReadAsync(key, encryptedDefaultValue);
+			StorageReadResponse response = await _storageProvider.ReadAsync(key, encryptedDefaultValue);
 			if (!response.Success)
 			{
 				Debug.LogError($"[{nameof(SaveService)}] Failed to load value for key: {key} with error: {response.Error}");
 			}
 			else
 			{
-				result = _serializer.Deserialize<T>(response.Result);
+				string decryptedValue = _cryptographer.Decrypt(response.Result);
+				result = _serializer.Deserialize<T>(decryptedValue);
 			}
 
 			return result;

@@ -5,6 +5,6 @@ namespace DataPersistence.Tests
 	[Serializable]
 	internal struct TestSaveData
 	{
-		public string Guid { get; set; }
+		public string Guid;
 	}
 }

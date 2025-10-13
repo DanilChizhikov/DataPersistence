@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace DTech.DataPersistence
+namespace DTech.DataPersistence.StorageProviders.Binary
 {
 	public sealed class BinaryStorageProvider : IStorageProvider
 	{
@@ -39,25 +39,25 @@ namespace DTech.DataPersistence
 			return result;
 		}
 
-		public async Task<WriterReadResponse> ReadAsync(string key, string defaultValue)
+		public async Task<StorageReadResponse> ReadAsync(string key, string defaultValue)
 		{
 			string filePath = GetFilePath(key);
 			if (!File.Exists(filePath))
 			{
 				await WriteAsync(key, defaultValue);
-				return new WriterReadResponse(true, defaultValue);
+				return new StorageReadResponse(true, defaultValue);
 			}
 			
 			try
 			{
 				using var reader = new StreamReader(filePath);
 				string result = await reader.ReadToEndAsync();
-				return new WriterReadResponse(true, result);
+				return new StorageReadResponse(true, result);
 			}
 			catch (Exception exception)
 			{
 				Debug.LogError($"[{nameof(BinaryStorageProvider)}] Failed to read from file: {filePath} with exception: {exception}");
-				return new WriterReadResponse(false, defaultValue, $"Failed to read from file: {filePath} with exception: {exception}");
+				return new StorageReadResponse(false, defaultValue, $"Failed to read from file: {filePath} with exception: {exception}");
 			}
 		}
 

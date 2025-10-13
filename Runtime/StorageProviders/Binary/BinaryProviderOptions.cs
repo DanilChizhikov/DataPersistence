@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace DTech.DataPersistence
+namespace DTech.DataPersistence.StorageProviders.Binary
 {
 	[Serializable]
 	public struct BinaryProviderOptions

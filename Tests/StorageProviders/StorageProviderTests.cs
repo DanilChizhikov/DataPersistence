@@ -26,7 +26,7 @@ namespace DataPersistence.Tests
 		}
 		
 		[UnityTest]
-		public IEnumerable WriteAsync_WhenCalled_ShouldWriteDataSuccessfully()
+		public IEnumerator WriteAsync_WhenCalled_ShouldWriteDataSuccessfully()
 		{
 			string defaultValue = Guid.NewGuid().ToString();
 			TaskAwaiter<bool> awaiter = StorageProvider.WriteAsync(TestSaveKey, defaultValue).GetAwaiter();
@@ -38,11 +38,11 @@ namespace DataPersistence.Tests
 		}
 		
 		[UnityTest]
-		public IEnumerable ReadAsync_WhenCalled_ShouldReadDataSuccessfully()
+		public IEnumerator ReadAsync_WhenCalled_ShouldReadDataSuccessfully()
 		{
 			string defaultValue = Guid.NewGuid().ToString();
 			
-			TaskAwaiter<WriterReadResponse> awaiter = StorageProvider.ReadAsync(TestSaveKey, defaultValue).GetAwaiter();
+			TaskAwaiter<StorageReadResponse> awaiter = StorageProvider.ReadAsync(TestSaveKey, defaultValue).GetAwaiter();
 
 			yield return new WaitUntil(() => awaiter.IsCompleted);
 			
@@ -51,7 +51,7 @@ namespace DataPersistence.Tests
 		}
 		
 		[UnityTest]
-		public IEnumerable RemoveData_WhenDataExists_ShouldRemoveDataSuccessfully()
+		public IEnumerator RemoveData_WhenDataExists_ShouldRemoveDataSuccessfully()
 		{
 			string defaultValue = Guid.NewGuid().ToString();
 
@@ -60,6 +60,8 @@ namespace DataPersistence.Tests
 			TaskAwaiter<bool> awaiter = StorageProvider.WriteAsync(TestSaveKey, defaultValue).GetAwaiter();
 
 			yield return new WaitUntil(() => awaiter.IsCompleted);
+			
+			StorageProvider.Remove(TestSaveKey);
 			
 			Assert.True(awaiter.IsCompleted);
 			Assert.False(hasKey);

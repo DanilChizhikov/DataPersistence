@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
 using DTech.DataPersistence;
+using DTech.DataPersistence.Cryptographers.Aes;
+using DTech.DataPersistence.Serializers;
+using DTech.DataPersistence.StorageProviders.Binary;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -20,7 +23,7 @@ namespace DataPersistence.Tests
 		{
 			var serialized = new UnityJsonSerializer();
 			var storageProvider = new BinaryStorageProvider(new BinaryProviderOptions(".bin"));
-			var cryptographer = new AesCryptographer(new AesConfig(Guid.NewGuid().ToString()));
+			var cryptographer = new AesCryptographer(new AesConfig("1234567890123456"));
 			_saveService = new SaveService(serialized, cryptographer, storageProvider);
 		}
 		
@@ -31,7 +34,7 @@ namespace DataPersistence.Tests
 		}
 		
 		[UnityTest]
-		public IEnumerable SaveAsync_WhenCalled_ShouldSaveDataSuccessfully()
+		public IEnumerator SaveAsync_WhenCalled_ShouldSaveDataSuccessfully()
 		{
 			var defaultSaveData = new TestSaveData
 			{
@@ -47,7 +50,7 @@ namespace DataPersistence.Tests
 		}
 
 		[UnityTest]
-		public IEnumerable LoadAsync_WhenDataExists_ShouldReturnSavedData()
+		public IEnumerator LoadAsync_WhenDataExists_ShouldReturnSavedData()
 		{
 			var data = new TestSaveData
 			{
@@ -74,7 +77,7 @@ namespace DataPersistence.Tests
 		}
 		
 		[UnityTest]
-		public IEnumerable LoadAsync_WhenNoDataExists_ShouldReturnDefaultValue()
+		public IEnumerator LoadAsync_WhenNoDataExists_ShouldReturnDefaultValue()
 		{
 			var defaultSaveData = new TestSaveData
 			{
@@ -91,7 +94,7 @@ namespace DataPersistence.Tests
 		}
 		
 		[UnityTest]
-		public IEnumerable RemoveData_WhenDataExists_ShouldRemoveDataSuccessfully()
+		public IEnumerator RemoveData_WhenDataExists_ShouldRemoveDataSuccessfully()
 		{
 			var defaultSaveData = new TestSaveData
 			{
@@ -99,10 +102,12 @@ namespace DataPersistence.Tests
 			};
 
 			bool hasKey = _saveService.HasSave(TestSaveKey);
-
-			TaskAwaiter<TestSaveData> awaiter = _saveService.LoadAsync(TestSaveKey, defaultSaveData).GetAwaiter();
-
+			
+			TaskAwaiter awaiter = _saveService.SaveAsync(TestSaveKey, defaultSaveData).GetAwaiter();
+			
 			yield return new WaitUntil(() => awaiter.IsCompleted);
+			
+			_saveService.Remove(TestSaveKey);
 			
 			Assert.True(awaiter.IsCompleted);
 			Assert.False(hasKey);

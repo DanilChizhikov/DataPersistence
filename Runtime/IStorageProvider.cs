@@ -6,7 +6,7 @@ namespace DTech.DataPersistence
 	{
 		bool ContainsKey(string key);
 		Task<bool> WriteAsync(string key, string value);
-		Task<WriterReadResponse> ReadAsync(string key, string defaultValue);
+		Task<StorageReadResponse> ReadAsync(string key, string defaultValue);
 		void Remove(string key);
 	}
 }

@@ -13,22 +13,9 @@ namespace DataPersistence.Tests
 		{
 			Serializer = GetSerializer();
 		}
-		
+
 		[Test]
-		public void Serialize_ShouldDoesNotThrow()
-		{
-			var testValue = new TestSaveData
-			{
-				Guid = Guid.NewGuid().ToString()
-			};
-			
-			string serializedValue = Serializer.Serialize(testValue);
-			Assert.DoesNotThrow(() => serializedValue = Serializer.Serialize(testValue));
-			Assert.IsNotEmpty(serializedValue);
-		}
-		
-		[Test]
-		public void Deserialize_ShouldDoesNotThrow()
+		public void SerializeAndDeserialize_ShouldReturnSameValue()
 		{
 			var testValue = new TestSaveData
 			{
@@ -37,6 +24,7 @@ namespace DataPersistence.Tests
 			
 			string serializedValue = Serializer.Serialize(testValue);
 			TestSaveData deserializedValue = default;
+			
 			Assert.DoesNotThrow(() => deserializedValue = Serializer.Deserialize<TestSaveData>(serializedValue));
 			Assert.AreEqual(testValue.Guid, deserializedValue.Guid);
 		}

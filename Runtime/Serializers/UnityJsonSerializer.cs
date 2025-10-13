@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace DTech.DataPersistence
+namespace DTech.DataPersistence.Serializers
 {
 	public sealed class UnityJsonSerializer : ISerializer
 	{

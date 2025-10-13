@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace DTech.DataPersistence
+namespace DTech.DataPersistence.Cryptographers.Aes
 {
 	[Serializable]
 	public struct AesConfig
