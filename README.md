@@ -2,7 +2,7 @@
 
 ## Status
 ![](https://img.shields.io/badge/unity-2022.3+-000.svg)
-![Tests](https://img.shields.io/badge/Tests-Passed-brightgreen.svg)
+![Tests](https://github.com/DanilChizhikov/DataPersistence/actions/workflows/unity-tests.yml/badge.svg)
 
 ## Description
 
