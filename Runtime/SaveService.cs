@@ -8,8 +8,20 @@ namespace DTech.DataPersistence
 		private readonly ISerializer _serializer;
 		private readonly ICryptographer _cryptographer;
 		private readonly IStorageProvider _storageProvider;
-		
-		public async Task SaveAsync<T>(string key, T value)
+
+		public SaveService(ISerializer serializer, ICryptographer cryptographer, IStorageProvider storageProvider)
+		{
+			_serializer = serializer;
+			_cryptographer = cryptographer;
+			_storageProvider = storageProvider;
+		}
+
+		public bool HasSave(string key)
+		{
+			return _storageProvider.ContainsKey(key);
+		}
+
+		public async Task SaveAsync<T>(string key, T value, bool isCrypted = true)
 		{
 			string encryptedValue = SerializeAndEncrypt(value);
 			await _storageProvider.WriteAsync(key, encryptedValue);
