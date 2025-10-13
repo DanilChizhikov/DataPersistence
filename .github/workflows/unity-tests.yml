@@ -1,4 +1,4 @@
-name: Unity Tests
+name: Unity Tests (Personal License)
 
 on:
   push:
@@ -6,8 +6,9 @@ on:
   pull_request:
 
 jobs:
-  tests:
+  unity-tests:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -16,7 +17,7 @@ jobs:
         uses: game-ci/unity-setup@v2
         with:
           unityVersion: 2022.3.0
-          personal: true # <-- именно для Personal лицензии
+          personal: true
 
       - name: Run EditMode Tests
         uses: game-ci/unity-test-runner@v4
@@ -24,6 +25,7 @@ jobs:
           unityVersion: 2022.3.0
           testMode: editmode
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+          testResults: EditModeResults.xml
 
       - name: Run PlayMode Tests
         uses: game-ci/unity-test-runner@v4
@@ -31,3 +33,4 @@ jobs:
           unityVersion: 2022.3.0
           testMode: playmode
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+          testResults: PlayModeResults.xml
