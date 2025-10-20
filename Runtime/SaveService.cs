@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -23,23 +24,26 @@ namespace DTech.DataPersistence
 
 		public async Task SaveAsync<T>(string key, T value, bool isCrypted = true)
 		{
-			string encryptedValue = SerializeAndEncrypt(value);
-			await _storageProvider.WriteAsync(key, encryptedValue);
+			SaveEntity saveEntity = GetSaveEntity(value, isCrypted);
+			string serializedSaveEntity = _serializer.Serialize(saveEntity);
+			await _storageProvider.WriteAsync(key, serializedSaveEntity);
 		}
 
-		public async Task<T> LoadAsync<T>(string key, T defaultValue)
+		public async Task<T> LoadAsync<T>(string key, T defaultValue, bool isCrypted = true)
 		{
 			T result = defaultValue;
-			string encryptedDefaultValue = SerializeAndEncrypt(defaultValue);
-			StorageReadResponse response = await _storageProvider.ReadAsync(key, encryptedDefaultValue);
+			SaveEntity defaultSaveEntity = GetSaveEntity(defaultValue, isCrypted);
+			string serializedDefaultEntity = _serializer.Serialize(defaultSaveEntity);
+			StorageReadResponse response = await _storageProvider.ReadAsync(key, serializedDefaultEntity);
 			if (!response.Success)
 			{
 				Debug.LogError($"[{nameof(SaveService)}] Failed to load value for key: {key} with error: {response.Error}");
 			}
 			else
 			{
-				string decryptedValue = _cryptographer.Decrypt(response.Result);
-				result = _serializer.Deserialize<T>(decryptedValue);
+				SaveEntity entity = _serializer.Deserialize<SaveEntity>(response.Result);
+				string serializedValue = entity.IsCrypted ? _cryptographer.Decrypt(entity.Value) : entity.Value;
+				result = _serializer.Deserialize<T>(serializedValue);
 			}
 
 			return result;
@@ -50,11 +54,21 @@ namespace DTech.DataPersistence
 			_storageProvider.Remove(key);
 		}
 
-		private string SerializeAndEncrypt<T>(T value)
+		private SaveEntity GetSaveEntity<T>(T value, bool isCrypted)
 		{
-			string serializedValue = _serializer.Serialize(value);
-			string encryptedValue = _cryptographer.Encrypt(serializedValue);
-			return encryptedValue;
+			var saveEntity = new SaveEntity
+			{
+				Value = _serializer.Serialize(value),
+				IsCrypted = isCrypted,
+				LastWriteTime = DateTime.Now.Ticks,
+			};
+			
+			if (isCrypted)
+			{
+				saveEntity.Value = _cryptographer.Encrypt(saveEntity.Value);
+			}
+			
+			return saveEntity;
 		}
 	}
 }
