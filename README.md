@@ -1,7 +1,7 @@
 # DataPersistence
 
 ## Status
-![](https://img.shields.io/badge/unity-2022.3+-000.svg)
+[![Unity Version](https://img.shields.io/badge/unity-6000.0+-000.svg)](https://unity3d.com/get-unity/download/archive)
 ![Tests](https://img.shields.io/badge/Tests-Passed-brightgreen.svg)
 
 ## Description
@@ -26,7 +26,7 @@ DataPersistence is a robust and flexible data saving and loading system for Unit
 ## Getting Started
 ### Prerequisites
 - [GIT](https://git-scm.com/downloads)
-- [Unity](https://unity.com/releases/editor/archive) 2022.3+
+- [Unity](https://unity.com/releases/editor/archive) 6000.0+
 
 ### Manual Installation
 1. Download the .unitypackage from the [releases](https://github.com/DanilChizhikov/DataPersistence/releases/) page.
@@ -40,9 +40,9 @@ DataPersistence is a robust and flexible data saving and loading system for Unit
     ```
 3. Unity will automatically import the package.
 
-If you want to set a target version, DataPersistence uses the `v*.*.*` release tag so you can specify a version like #v0.1.0.
+If you want to set a target version, DataPersistence uses the `v*.*.*` release tag so you can specify a version like #v1.0.0.
 
-For example `https://github.com/DanilChizhikov/DataPersistence.git#v0.1.0`.
+For example `https://github.com/DanilChizhikov/DataPersistence.git#v1.0.0`.
 
 ## Features
 - 🔒 Secure data encryption (AES-256)
